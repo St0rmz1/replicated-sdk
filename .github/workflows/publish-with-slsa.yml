@@ -126,16 +126,16 @@ jobs:
     #
     # Don't need this as we don't publish the chart for this test
     #
-    - name: Run Package and Publish
-      env: 
-        REPLICATED_TAG: slsa-v${{needs.get-tags.outputs.tag}}
-        REPLICATED_REGISTRY: St0rmz1 # docker.io/replicated
-        REPLICATED_CHART_NAME: replicated
-        REPLICATED_CHART_VERSION: ${{needs.get-tags.outputs.tag}}
-        # REPLICATED_USER_STAGING: ${{secrets.REPLICATED_USER_STAGING}}
-        # REPLICATED_PASS_STAGING: ${{secrets.REPLICATED_PASS_STAGING}}
-        REPLICATED_USER_PROD: ${{secrets.REPLICATED_USER_PROD}}
-        REPLICATED_PASS_PROD: ${{secrets.REPLICATED_PASS_PROD}}
+    # - name: Run Package and Publish
+    #  env: 
+    #    REPLICATED_TAG: slsa-v${{needs.get-tags.outputs.tag}}
+    #    REPLICATED_REGISTRY: St0rmz1 # docker.io/replicated
+    #    REPLICATED_CHART_NAME: replicated
+    #    REPLICATED_CHART_VERSION: ${{needs.get-tags.outputs.tag}}
+    #    REPLICATED_USER_STAGING: ${{secrets.REPLICATED_USER_STAGING}}
+    #    REPLICATED_PASS_STAGING: ${{secrets.REPLICATED_PASS_STAGING}}
+    #    REPLICATED_USER_PROD: ${{secrets.REPLICATED_USER_PROD}}
+    #    REPLICATED_PASS_PROD: ${{secrets.REPLICATED_PASS_PROD}}
       
       #
       #
