@@ -4,7 +4,7 @@ name: PR/main branch CI
 # Storms changed to workflow_dispatch so this won't auto run on merge to main during testing
 #
 on:
-  worflow_dispatch:
+  workflow_dispatch:
 #  pull_request:
 #    branches:
 #      - main
