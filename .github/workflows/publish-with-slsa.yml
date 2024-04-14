@@ -119,7 +119,7 @@ jobs:
     - uses: ./.github/actions/build-push-action
       with:
         context: deploy
-        image-name: index.docker.io/St0rmz1/replicated-sdk:v${{needs.get-tags.outputs.tag}}
+        image-name: index.docker.io/st0rmz1/replicated-sdk:v${{needs.get-tags.outputs.tag}}
         git-tag: v${{needs.get-tags.outputs.tag}}
         registry-username: ${{ secrets.DOCKERHUB_USER }}
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
@@ -130,7 +130,7 @@ jobs:
     # - name: Run Package and Publish
     #  env: 
     #    REPLICATED_TAG: slsa-v${{needs.get-tags.outputs.tag}}
-    #    REPLICATED_REGISTRY: St0rmz1 # docker.io/replicated
+    #    REPLICATED_REGISTRY: st0rmz1 # docker.io/replicated
     #    REPLICATED_CHART_NAME: replicated
     #    REPLICATED_CHART_VERSION: ${{needs.get-tags.outputs.tag}}
     #    REPLICATED_USER_STAGING: ${{secrets.REPLICATED_USER_STAGING}}
