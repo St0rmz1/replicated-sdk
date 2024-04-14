@@ -1,4 +1,4 @@
-name: publish
+name: publish with SLSA
 on:
   push:
     tags:
