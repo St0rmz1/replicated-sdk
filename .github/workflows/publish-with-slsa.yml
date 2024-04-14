@@ -119,7 +119,7 @@ jobs:
     - uses: ./.github/actions/build-push-action
       with:
         context: deploy
-        image-name: index.docker.io/St0rmz1/replicated-sdk:slsa-v${{needs.get-tags.outputs.tag}}
+        image-name: index.docker.io/St0rmz1/replicated-sdk:v${{needs.get-tags.outputs.tag}}
         git-tag: v${{needs.get-tags.outputs.tag}}
         registry-username: ${{ secrets.DOCKERHUB_USER }}
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
