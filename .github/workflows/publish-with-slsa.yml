@@ -1,8 +1,9 @@
 name: publish with SLSA
 on:
-  push:
-    tags:
-    - 'slsa-v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+#  push:
+#    tags:
+#    - 'slsa-v[0-9]+.[0-9]+.[0-9]+'
    # - 'slsa-v[0-9]+.[0-9]+.[0-9]+\-beta'
    # - 'slsa-v[0-9]+.[0-9]+.[0-9]+\-beta\.[0-9]+'
    # - 'slsa-v[0-9]+.[0-9]+.[0-9]+\-alpha'
