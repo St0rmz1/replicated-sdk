@@ -127,7 +127,7 @@ jobs:
   #
   # Debug print all vars from the build-push-action
   #
-   debug-print-vars:
+  debug-print-vars:
     needs: 
     - package-and-publish
     - get-tags
