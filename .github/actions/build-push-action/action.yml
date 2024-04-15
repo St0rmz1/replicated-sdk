@@ -58,6 +58,22 @@ runs:
       # Set the output for the final image digest 
       # steps.docker-run.outputs.digest is set by the apko-publish action so add it to the output as foofoo
       run: |
+        echo "DEBUG PRINT VARs"
+         echo "Environment Variables:"
+          env
+          
+          echo "Output Variables:"
+          for step_id in $(echo "${!steps[@]}"); do
+              step_name=$(echo "${steps[$step_id].name}")
+              for output_name in $(echo "${!steps[$step_id].outputs[@]}"); do
+                  output_value=$(echo "${steps[$step_id].outputs[$output_name]}")
+                  echo "Step: $step_name, Output: $output_name, Value: $output_value"
+              done
+          done
+
+
+
+
         echo "{img-digest-from-docker}=${{ steps.docker-run.outputs.digest }}" >> $GITHUB_OUTPUT
         echo "{final-image-digest}=${{ steps.apko-publish.outputs.digest }}" >> $GITHUB_OUTPUT
 
