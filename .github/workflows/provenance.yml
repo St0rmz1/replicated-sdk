@@ -17,5 +17,6 @@ jobs:
     with:
       image: $IMAGE_NAME
       digest: $DIGEST
+    secrets:
       registry-username: ${{ secrets.DOCKERHUB_USER }}
       registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
