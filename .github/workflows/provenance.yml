@@ -26,6 +26,6 @@ jobs:
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with:
       image: $IMAGE_NAME
-      digest: ${{ DIGEST }}
+      digest: $DIGEST
       registry-username: ${{ secrets.DOCKERHUB_USER }}
       registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
