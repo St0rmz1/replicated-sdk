@@ -45,7 +45,8 @@ runs:
         cache-dir: ${{ steps.cache-dir.outputs.cache_dir }}
 
     #- uses: chainguard-images/actions/apko-publish@main
-    - uses: St0rmz1/actions/my-apko-publish@main
+    # ./.github/actions/build-push-action
+    - uses: ./.github/actions/my-apko-publish@main
       with:
         config: ${{ inputs.context }}/apko.yaml
         tag: ${{ inputs.image-name }}
