@@ -46,6 +46,9 @@ runs:
 
     #- uses: chainguard-images/actions/apko-publish@main
     # ./.github/actions/build-push-action
+    - name: Checkout
+      uses: actions/checkout@v4
+
     - uses: ./.github/actions/my-apko-publish@main
       with:
         config: ${{ inputs.context }}/apko.yaml
