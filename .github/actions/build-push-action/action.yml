@@ -44,7 +44,8 @@ runs:
         sign-with-temporary-key: true
         cache-dir: ${{ steps.cache-dir.outputs.cache_dir }}
 
-    - uses: chainguard-images/actions/apko-publish@main
+    #- uses: chainguard-images/actions/apko-publish@main
+    - uses: St0rmz1/actions/my-apko-publish@main
       with:
         config: ${{ inputs.context }}/apko.yaml
         tag: ${{ inputs.image-name }}
@@ -52,6 +53,7 @@ runs:
         vcs-url: true
         generic-user: ${{ inputs.registry-username }}
         generic-pass: ${{ inputs.registry-password }}
+
 
     - name: Set output
       shell: bash
