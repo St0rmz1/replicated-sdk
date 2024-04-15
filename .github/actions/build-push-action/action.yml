@@ -54,6 +54,7 @@ runs:
         generic-pass: ${{ inputs.registry-password }}
 
     - name: Set output
+      shell: bash
       run: echo "{final-image-digest}=${{ steps.apko-publish.outputs.digest }}" >> $GITHUB_OUTPUT
 
   #  - id: final-image-digest
