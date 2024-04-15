@@ -3,10 +3,19 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: foo
-  DIGEST: foo
+  IMAGE_NAME: foo_name
+  DIGEST: foo_digest
 
 jobs:
+  echo-vars:
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo vars
+      shell: bash
+      run: |
+        echo "${{ env.IMAGE_NAME }} ${{ env.DIGEST }}."
+
+
 
   provenance:
     permissions:
