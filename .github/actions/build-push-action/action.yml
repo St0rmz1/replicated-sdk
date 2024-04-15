@@ -55,7 +55,12 @@ runs:
 
     - name: Set output
       shell: bash
-      run: echo "{final-image-digest}=${{ steps.apko-publish.outputs.digest }}" >> $GITHUB_OUTPUT
+      # Set the output for the final image digest 
+      # steps.docker-run.outputs.digest is set by the apko-publish action so add it to the output as foofoo
+      run: |
+        echo "{img-digest-from-docker}=${{ steps.docker-run.outputs.digest }}" >> $GITHUB_OUTPUT
+        echo "{final-image-digest}=${{ steps.apko-publish.outputs.digest }}" >> $GITHUB_OUTPUT
+
 
   #  - id: final-image-digest
   #    shell: bash
