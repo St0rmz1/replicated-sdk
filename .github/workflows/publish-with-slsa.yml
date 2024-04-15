@@ -128,7 +128,9 @@ jobs:
   # Debug print all vars from the build-push-action
   #
    debug-print-vars:
-    needs: package-and-publish
+    needs: 
+    - package-and-publish
+    - get-tags
     runs-on: ubuntu-latest
     steps:
       - name: print output vars
@@ -147,6 +149,7 @@ jobs:
   provenance: 
     needs:
       - package-and-publish
+      - get-tags
     permissions:
       actions: read # for detecting the Github Actions environment.
       id-token: write # for creating OIDC tokens for signing.
