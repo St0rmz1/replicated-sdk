@@ -139,7 +139,7 @@ jobs:
           for key in ${{ toJson(needs.package-and-publish.outputs) }}; do
             echo "$key=${{ toJson(needs.package-and-publish.outputs) }}";
           done
-          echo "needs.package-and-publoish.outputs.digest=${{ needs.package-and-publish.outputs.digest }}"
+          echo "needs.package-and-publish.outputs.digest=${{ needs.package-and-publish.outputs.digest }}"
           echo "steps.docker-run.outputs.digest=${{ steps.docker-run.outputs.digest }}"
       # - name: digest-from-package-and-publish:
       #  run: echo ${{ needs.package-and-publish.outputs.digest }}
