@@ -175,6 +175,9 @@ runs:
         ${{ inputs.debug && '--log-level debug' }} \
         --image-refs="${{ inputs.image_refs }}" ${{ inputs.config }} ${{ inputs.tag }} $keys $repos $packages $archs $build_options $sbomPath | tee ${DIGEST_FILE}
       echo EXIT CODE: $?
+      echo "DEBUG PRINT DIGEST FILE:"
+      cat ${DIGEST_FILE}
+      echo "END DEBUG PRINT DIGEST FILE"
       echo ::set-output name=digest::$(cat ${DIGEST_FILE})
       EOF
       )"
