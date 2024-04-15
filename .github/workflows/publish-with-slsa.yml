@@ -127,20 +127,20 @@ jobs:
   #
   # Debug print all vars from the build-push-action
   #
-  # debug-print-vars:
-  #  needs: package-and-publish
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - name: print output vars
-  #      run:
-  #        #loop over the outputs from package-and-publish and print them
-  #        for key in ${{ toJson(needs.package-and-publish.outputs) }}; do
-  #          echo "$key=${{ toJson(needs.package-and-publish.outputs) }}";
-  #        done
-  #        echo "needs.package-and-publoish.outputs.digest=${{ needs.package-and-publish.outputs.digest }}"
-  #        echo "steps.docker-run.outputs.digest=${{ steps.docker-run.outputs.digest }}"
-  #    # - name: digest-from-package-and-publish:
-  #    #  run: echo ${{ needs.package-and-publish.outputs.digest }}
+   debug-print-vars:
+    needs: package-and-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: print output vars
+        run:
+          #loop over the outputs from package-and-publish and print them
+          for key in ${{ toJson(needs.package-and-publish.outputs) }}; do
+            echo "$key=${{ toJson(needs.package-and-publish.outputs) }}";
+          done
+          echo "needs.package-and-publoish.outputs.digest=${{ needs.package-and-publish.outputs.digest }}"
+          echo "steps.docker-run.outputs.digest=${{ steps.docker-run.outputs.digest }}"
+      # - name: digest-from-package-and-publish:
+      #  run: echo ${{ needs.package-and-publish.outputs.digest }}
   
 
 
