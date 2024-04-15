@@ -135,7 +135,7 @@ jobs:
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with: 
      image: index.docker.io/st0rmz1/replicated-sdk:v${{needs.get-tags.outputs.tag}}
-     digest: 'foo'
+     digest: ${{steps.docker-run.outputs.digest}}
     secrets:
       registry-username: ${{ secrets.DOCKERHUB_USER }}
       registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
