@@ -3,8 +3,8 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: foo_name
-  DIGEST: foo_digest
+  IMAGE_NAME: replicated-sdk:v0.0.1
+  DIGEST: sha256:7bd0438f402efed42689b2bd30e401abde47b57068b99c6d61bf5e4c5ae0eb00
 
 jobs:
   provenance:
