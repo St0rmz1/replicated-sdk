@@ -124,6 +124,15 @@ jobs:
         registry-username: ${{ secrets.DOCKERHUB_USER }}
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+    - uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+      with: 
+        image: v${{needs.get-tags.outputs.tag}}
+        digest: 'foo'
+        registry-username: ${{ secrets.DOCKERHUB_USER }}
+        registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+
+
     #
     # Don't need this as we don't publish the chart for this test
     #
