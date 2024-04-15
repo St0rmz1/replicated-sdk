@@ -7,16 +7,6 @@ env:
   DIGEST: foo_digest
 
 jobs:
-  echo-vars:
-    runs-on: ubuntu-latest
-    steps:
-    - name: echo vars
-      shell: bash
-      run: |
-        echo "${{ env.IMAGE_NAME }} ${{ env.DIGEST }}."
-
-
-
   provenance:
     permissions:
       actions: read # for detecting the Github Actions environment.
