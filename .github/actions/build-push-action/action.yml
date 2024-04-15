@@ -52,3 +52,7 @@ runs:
         vcs-url: true
         generic-user: ${{ inputs.registry-username }}
         generic-pass: ${{ inputs.registry-password }}
+
+    - id: final-image-digest
+      shell: bash
+      run: echo "::set-output name=final-image-digest::${{ steps.apko-publish.outputs.digest }}"
