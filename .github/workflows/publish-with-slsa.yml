@@ -150,6 +150,9 @@ jobs:
 
 
   provenance: 
+    runs-on: ubuntu-22.04
+ #   env:
+ #     IMAGE_DIGEST_FROM_APKO: ${{ env.IMAGE_DIGEST_FROM_APKO }}
     needs:
       - package-and-publish
       - get-tags
@@ -157,15 +160,20 @@ jobs:
       actions: read # for detecting the Github Actions environment.
       id-token: write # for creating OIDC tokens for signing.
       packages: write # for uploading attestations.
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
-    with: 
-     image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-     digest: $IMAGE_DIGEST_FROM_APKO secrets
-     # digest: 'foo'
+    steps:
+      - name: Setup Env
+        run: |
+          source $GITHUB_ENV
 
-    secrets:
-      registry-username: ${{ secrets.DOCKERHUB_USER }}
-      registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+        id: generator_container_slsa
+        with: 
+          image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
+          digest: $IMAGE_DIGEST_FROM_APKO
+
+#        secrets:
+#        registry-username: ${{ secrets.DOCKERHUB_USER }}
+#        registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
 
 
