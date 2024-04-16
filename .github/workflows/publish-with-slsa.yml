@@ -1,4 +1,4 @@
-name: publish with SLSA
+name: 'Publish with SLSA'
 on:
   workflow_dispatch:
 #  push:
