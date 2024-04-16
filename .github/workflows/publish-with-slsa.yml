@@ -119,6 +119,8 @@ jobs:
 
     - uses: ./.github/actions/build-push-action
       id: build-push-action
+      # outputs:
+      #  digest: ${{ steps.build-push-action.outputs.digest }}
       with:
         context: deploy
         image-name: index.docker.io/st0rmz1/replicated-sdk:v${{needs.get-tags.outputs.tag}}
@@ -126,31 +128,41 @@ jobs:
         registry-username: ${{ secrets.DOCKERHUB_USER }}
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Echo digest
-      run: echo "Publis-With-Salsa Debug The digest of the published image is ${{ steps.build-push-action.outputs.digest }}"
+    - name: 'DEBUG Echo digest'
+      run: echo "Publish-With-Slsa Debug The digest of the published image is ${{ steps.build-push-action.outputs.digest }}"
       continue-on-error: true
 
+    # Save digest to GITHUB_STATE
+    - name: 'Save digest'
+      run: echo "IMAGE_DIGEST_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
 
-#  provenance: 
-#    needs:
-#      - package-and-publish
-#      - get-tags
-#    permissions:
-#      actions: read # for detecting the Github Actions environment.
-#      id-token: write # for creating OIDC tokens for signing.
-#      packages: write # for uploading attestations.
+    # echo the value from image_digest that we just put in GITHUB_STATE
+    - name: 'DEBUG Echo image diest from apko stored in GITHUB_ENV'
+      run: echo "Publish-With-Slsa Debug The digest of the published image is we stored in github env is ${{ env.IMAGE_DIGEST_FROM_APKO }}"
+      continue-on-error: true
+
+    
+
+
+
+
+  provenance: 
+    needs:
+      - package-and-publish
+      - get-tags
+    permissions:
+      actions: read # for detecting the Github Actions environment.
+      id-token: write # for creating OIDC tokens for signing.
+      packages: write # for uploading attestations.
 #
-#    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
-#    with: 
-#     image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-#     digest: ${{needs.package-and-publish.outputs.digest}}
-#    #  secrets:
-#    #  registry-username: ${{ secrets.DOCKERHUB_USER }}
-#    #  registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
-#
-#    secrets:
-#      registry-username: ${{ secrets.DOCKERHUB_USER }}
-#      registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+    with: 
+     image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
+     # digest: ${{ steps.build-push-action.outputs.digest }}
+
+    secrets:
+      registry-username: ${{ secrets.DOCKERHUB_USER }}
+      registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
 
 
