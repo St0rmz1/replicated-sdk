@@ -1,3 +1,4 @@
+# workflows/publish-with-slsa.yml
 name: 'Publish with SLSA'
 on:
   workflow_dispatch:
@@ -126,37 +127,32 @@ jobs:
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
 
-  provenance: 
-    needs:
-      - package-and-publish
-      - get-tags
-    permissions:
-      actions: read # for detecting the Github Actions environment.
-      id-token: write # for creating OIDC tokens for signing.
-      packages: write # for uploading attestations.
-
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
-    with: 
-     image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-     digest: ${{needs.package-and-publish.outputs.digest}}
-     # set the digest value to be the value from another step which sets ::set-output name=final-image-digest:
-     # digest: ${{ needs.build-push-action.outputs.digest}}
-     # digest: ${{ needs.build-push-action.outputs.digest}}
-     # digest: ${{ needs.build-push-action.}}A
-     # digest: ${{ needs.package-and-publish.outputs.digest}}
-     # Set the digest input to be the output variable called "digest" from package-and-publish -> build-push-action
-    #  secrets:
-    #  registry-username: ${{ secrets.DOCKERHUB_USER }}
-    #  registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-
-
-
-
-     # digest: ${{steps.docker-run.outputs.digest}}
-    secrets:
-      registry-username: ${{ secrets.DOCKERHUB_USER }}
-      registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+ # provenance: 
+ #   needs:
+ #     - package-and-publish
+ #     - get-tags
+ #   permissions:
+ #     actions: read # for detecting the Github Actions environment.
+ #     id-token: write # for creating OIDC tokens for signing.
+ #     packages: write # for uploading attestations.
+#
+#    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+#    with: 
+#     image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
+#     digest: ${{needs.package-and-publish.outputs.digest}}
+#     # set the digest value to be the value from another step which sets ::set-output name=final-image-digest:
+#     # digest: ${{ needs.build-push-action.outputs.digest}}
+#     # digest: ${{ needs.build-push-action.outputs.digest}}
+#     # digest: ${{ needs.build-push-action.}}A
+#     # digest: ${{ needs.package-and-publish.outputs.digest}}
+#     # Set the digest input to be the output variable called "digest" from package-and-publish -> build-push-action
+#    #  secrets:
+#    #  registry-username: ${{ secrets.DOCKERHUB_USER }}
+#    #  registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+#
+#    secrets:
+#      registry-username: ${{ secrets.DOCKERHUB_USER }}
+#      registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
 
 

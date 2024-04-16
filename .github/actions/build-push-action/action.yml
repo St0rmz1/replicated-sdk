@@ -45,6 +45,7 @@ runs:
       shell: bash
       run: echo "cache_dir=$(go env GOMODCACHE)" >> "$GITHUB_OUTPUT"
 
+    # Build with melange
     - uses: chainguard-dev/actions/melange-build@main
       id: melange-build
       with:
@@ -53,6 +54,8 @@ runs:
         sign-with-temporary-key: true
         cache-dir: ${{ steps.cache-dir.outputs.cache_dir }}
 
+    # Publish with apko to the registry
+    # The digest of the published image is needed for the provenance job
     - uses: chainguard-images/actions/apko-publish@main
       id: apko-publish
       with:
@@ -62,3 +65,14 @@ runs:
         vcs-url: true
         generic-user: ${{ inputs.registry-username }}
         generic-pass: ${{ inputs.registry-password }}
+
+    # Generate provenance and publish using
+    # slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+    - uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+      id: slsa-generator
+      with:
+        image: ${{ inputs.image-name }}
+        digest: ${{ steps.apko-publish.outputs.digest }}
+        secrets:
+          registry-username: ${{ inputs.registry-username }}
+          registry-password: ${{ inputs.registry-password }} 
