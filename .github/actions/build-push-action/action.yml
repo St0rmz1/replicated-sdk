@@ -1,3 +1,4 @@
+# build-push-action/action.yml
 name: 'Build and push images with Chainguard'
 description: 'Composite action for building and pushing images with Chainguard'
 inputs:
@@ -23,6 +24,13 @@ inputs:
     default: ''
     required: false
 
+outputs:
+  digest:
+    value: ${{ steps.apko-publish.outputs.digest }}
+    description: |
+      The digest of the published container image.
+
+
 runs:
   using: "composite"
   steps:
@@ -38,18 +46,15 @@ runs:
       run: echo "cache_dir=$(go env GOMODCACHE)" >> "$GITHUB_OUTPUT"
 
     - uses: chainguard-dev/actions/melange-build@main
+      id: melange-build
       with:
         config: ${{ inputs.context }}/melange.yaml
         archs: amd64,arm64
         sign-with-temporary-key: true
         cache-dir: ${{ steps.cache-dir.outputs.cache_dir }}
 
-    #- uses: chainguard-images/actions/apko-publish@main
-    # ./.github/actions/build-push-action
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - uses: ./.github/actions/my-apko-publish@main
+    - uses: chainguard-images/actions/apko-publish@main
+      id: apko-publish
       with:
         config: ${{ inputs.context }}/apko.yaml
         tag: ${{ inputs.image-name }}
@@ -57,33 +62,3 @@ runs:
         vcs-url: true
         generic-user: ${{ inputs.registry-username }}
         generic-pass: ${{ inputs.registry-password }}
-
-
-    - name: Set output
-      shell: bash
-      # Set the output for the final image digest 
-      # steps.docker-run.outputs.digest is set by the apko-publish action so add it to the output as foofoo
-      run: |
-        echo "DEBUG PRINT VARs"
-         echo "Environment Variables:"
-          env
-          
-          echo "Output Variables:"
-          for step_id in $(echo "${!steps[@]}"); do
-              step_name=$(echo "${steps[$step_id].name}")
-              for output_name in $(echo "${!steps[$step_id].outputs[@]}"); do
-                  output_value=$(echo "${steps[$step_id].outputs[$output_name]}")
-                  echo "Step: $step_name, Output: $output_name, Value: $output_value"
-              done
-          done
-
-
-
-
-        echo "{img-digest-from-docker}=${{ steps.docker-run.outputs.digest }}" >> $GITHUB_OUTPUT
-        echo "{final-image-digest}=${{ steps.apko-publish.outputs.digest }}" >> $GITHUB_OUTPUT
-
-
-  #  - id: final-image-digest
-  #    shell: bash
-  #    run: echo "::set-output name=final-image-digest::${{ steps.apko-publish.outputs.digest }}"

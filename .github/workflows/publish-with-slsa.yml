@@ -117,33 +117,13 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - uses: ./.github/actions/build-push-action
+      id: build-push-action
       with:
         context: deploy
         image-name: index.docker.io/st0rmz1/replicated-sdk:v${{needs.get-tags.outputs.tag}}
         git-tag: v${{needs.get-tags.outputs.tag}}
         registry-username: ${{ secrets.DOCKERHUB_USER }}
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-  #
-  # Debug print all vars from the build-push-action
-  #
-  debug-print-vars:
-    needs: 
-    - package-and-publish
-    - get-tags
-    runs-on: ubuntu-latest
-    steps:
-      - name: print output vars
-        run:
-          #loop over the outputs from package-and-publish and print them
-          for key in ${{ toJson(needs.package-and-publish.outputs) }}; do
-            echo "$key=${{ toJson(needs.package-and-publish.outputs) }}";
-          done
-          echo "needs.package-and-publish.outputs.digest=${{ needs.package-and-publish.outputs.digest }}"
-          echo "steps.docker-run.outputs.digest=${{ steps.docker-run.outputs.digest }}"
-      # - name: digest-from-package-and-publish:
-      #  run: echo ${{ needs.package-and-publish.outputs.digest }}
-  
 
 
   provenance: 
@@ -159,7 +139,16 @@ jobs:
     with: 
      image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
      # set the digest value to be the value from another step which sets ::set-output name=final-image-digest:
-     digest: ${{ needs.publish.outputs.final-image-digest }}
+     # digest: ${{ needs.build-push-action.outputs.digest}}
+     # digest: ${{ needs.build-push-action.outputs.digest}}
+     # digest: ${{ needs.build-push-action.}}A
+     # digest: ${{ needs.package-and-publish.outputs.digest}}
+     # Set the digest input to be the output variable called "digest" from package-and-publish -> build-push-action
+      digest: ${{needs.package-and-publish.outputs.digest}}
+    secrets:
+      registry-username: ${{ secrets.DOCKERHUB_USER }}
+      registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
 
 
 
