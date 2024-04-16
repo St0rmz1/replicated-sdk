@@ -74,5 +74,8 @@ runs:
         image: ${{ inputs.image-name }}
         digest: ${{ steps.apko-publish.outputs.digest }}
         secrets:
-          registry-username: ${{ inputs.registry-username }}
-          registry-password: ${{ inputs.registry-password }} 
+          registry-username: ${{ secrets.DOCKERHUB_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      #  secrets:
+      #    registry-username: ${{ inputs.registry-username }}
+      #    registry-password: ${{ inputs.registry-password }} 
