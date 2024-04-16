@@ -94,6 +94,8 @@ jobs:
 
   package-and-publish:
     runs-on: 'ubuntu-22.04'
+    outputs:
+      image_digest_apko: ${{ steps.build-push-action.outputs.digest }}
     needs:
       - get-tags
    #   - make-tests
@@ -129,16 +131,17 @@ jobs:
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: 'Save digest'
+      id: save-digest
       run: |
         echo "::set-output name=image_digest_apko::${{ steps.build-push-action.outputs.digest }}"
 
     - name: 'Save Digest to file digest.txt'
       run: |
         echo ${{ steps.build-push-action.outputs.digest }} > digest.txt
+        cat digest.txt
 
 
   provenance: 
-    # runs-on: ubuntu-latest
     needs:
       - package-and-publish
       - get-tags
@@ -149,12 +152,21 @@ jobs:
     if: success() && needs.package-and-publish.result == 'success'
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with: 
-     image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-     #digest: $image_digest_apko
-     digest: ${{ needs.package-and-publish.outputs.image_digest_apko }}
+      image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
+      digest: ${{ needs.package-and-publish.outputs.image_digest_apko }}
     secrets:
-     registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
-     registry-username: ${{ secrets.DOCKERHUB_USER }}
+      registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      registry-username: ${{ secrets.DOCKERHUB_USER }}
+    
+    
+    # uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+    # with: 
+    #  image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
+    #  #digest: $image_digest_apko
+    #  digest: ${{ needs.package-and-publish.outputs.image_digest_apko }}
+    # secrets:
+    #  registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    #  registry-username: ${{ secrets.DOCKERHUB_USER }}
 
 
 
