@@ -134,10 +134,10 @@ jobs:
 
     # Save digest to GITHUB_STATE
     - name: 'Save digest'
-      run: echo "IMAGE_DIGEST_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_STATE
+      run: echo "IMAGE_DIGEST_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
     
-    # Echo the IMAGE_DIGEST_FROM_APKO value from the $GITHUB_STATE
-    - name: 'DEBUG Echo GITHUB_STATE'
+    # Echo the IMAGE_DIGEST_FROM_APKO value from the $GITHUB_ENV
+    - name: 'DEBUG Echo GITHUB_ENV'
       run: echo "Publish-With-Slsa Debug The digest of the published image is ${{ env.IMAGE_DIGEST_FROM_APKO }}"
       continue-on-error: true
 
@@ -159,6 +159,8 @@ jobs:
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with: 
      image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
+     # digest: ${{ env.IMAGE_DIGEST_FROM_APKO }}
+     # digest is the IMAGE_DIGEST_FROM_APKO we put in GITHUB_ENV
      digest: ${{ env.IMAGE_DIGEST_FROM_APKO }}
 
     secrets:
