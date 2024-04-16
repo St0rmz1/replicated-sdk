@@ -18,8 +18,6 @@ on:
 #  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
 
 jobs:
- # env:
-    # IMAGE_DIGEST_FROM_APKO: 'false'
   get-tags:
     runs-on: ubuntu-22.04
     outputs:
@@ -93,6 +91,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   package-and-publish:
+    #env:
+    #  IMAGE_DIGEST_FROM_APKO: 'false'
+    permissions:
+      actions: read # for detecting the Github Actions environment.
+      id-token: write # for creating OIDC tokens for signing.
+      packages: write # for uploading attestations.
     runs-on: 'ubuntu-22.04'
     needs:
       - get-tags
@@ -121,8 +125,6 @@ jobs:
 
     - uses: ./.github/actions/build-push-action
       id: build-push-action
-      # outputs:
-      #  digest: ${{ steps.build-push-action.outputs.digest }}
       with:
         context: deploy
         image-name: index.docker.io/st0rmz1/replicated-sdk:v${{needs.get-tags.outputs.tag}}
@@ -135,38 +137,31 @@ jobs:
       continue-on-error: true
 
     # Save digest to GITHUB_STATE
-    - name: 'Save digest'
-      run: echo "IMAGE_DIGEST_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
+    # - name: 'Save digest'
+    # run: echo "IMAGE_DIGEST_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
     
     # Echo the IMAGE_DIGEST_FROM_APKO value from the $GITHUB_ENV
-    - name: 'DEBUG Echo GITHUB_ENV'
-      continue-on-error: true
-      run: |
-        echo "Publish-With-Slsa Debug The digest of the published image is"
-        echo $IMAGE_DIGEST_FROM_APKO
+    # - name: 'DEBUG Echo GITHUB_ENV'
+    #  continue-on-error: true
+    #  run: |
+    #    echo "Publish-With-Slsa Debug The digest of the published image is"
+    #    echo $IMAGE_DIGEST_FROM_APKO
+
+    - uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+      id: provenance
+      with: 
+        image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
+        # digest: $IMAGE_DIGEST_FROM_APKO
+        digest: ${{ steps.build-push-action.outputs.digest }}
+        secrets:
+        registry-username: ${{ secrets.DOCKERHUB_USER }}
+        registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
 
-
-  provenance: 
-    needs:
-      - package-and-publish
-      - get-tags
-    permissions:
-      actions: read # for detecting the Github Actions environment.
-      id-token: write # for creating OIDC tokens for signing.
-      packages: write # for uploading attestations.
+    #needs:
+    #  - package-and-publish
+    #  - get-tags
 #
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
-    with: 
-     image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-     # digest: ${{ env.IMAGE_DIGEST_FROM_APKO }}
-     # digest is the IMAGE_DIGEST_FROM_APKO we put in GITHUB_ENV
-     digest: $IMAGE_DIGEST_FROM_APKO
-
-    secrets:
-      registry-username: ${{ secrets.DOCKERHUB_USER }}
-      registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
 
 
     #
