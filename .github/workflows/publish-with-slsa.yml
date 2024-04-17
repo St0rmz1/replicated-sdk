@@ -95,7 +95,8 @@ jobs:
   package-and-publish:
     runs-on: 'ubuntu-22.04'
     outputs:
-      image_digest_apko: ${{ steps.build-push-action.outputs.digest }}
+      # image_digest_apko: ${{ steps.build-push-action.outputs.digest }}
+      test-output1: $ {{ steps.build-push-action.outputs.digest }}
     needs:
       - get-tags
    #   - make-tests
@@ -133,7 +134,9 @@ jobs:
     - name: 'Save digest'
       id: save-digest
       run: |
-        echo "::set-output name=image_digest_apko::${{ steps.build-push-action.outputs.digest }}"
+        # echo "::set-output name=image_digest_apko::${{ steps.build-push-action.outputs.digest }}"
+        # echo APKO_DIGEST=${{ steps.build-push-action.outputs.digest }} >> "$GITHUB_OUTPUT"
+        echo "out1=Your Output1" >> $GITHUB_OUTPUT
 
     - name: 'Save Digest to file digest.txt'
       run: |
@@ -153,7 +156,14 @@ jobs:
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with: 
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-      digest: ${{ needs.package-and-publish.outputs.image_digest_apko }}
+      # digest: ${{ needs.package-and-publish.outputs.image_digest_apko }}
+      # digest: ${{ steps.save-digest.outputs.APKO_DIGEST }}
+      # digest: is the value of APKO_DIGEST that we put in GITHUB_OUTPUT from line 137
+      # digest: ${{ needs.save-digest.outputs.image_digest_apko }}
+      digest: "${{ needs.package-and-publish.outputs.test-output1 }}"
+
+
+
     secrets:
       registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
       registry-username: ${{ secrets.DOCKERHUB_USER }}
