@@ -96,7 +96,7 @@ jobs:
     runs-on: 'ubuntu-22.04'
     outputs:
       # image_digest_apko: ${{ steps.build-push-action.outputs.digest }}
-      test-output1: $ {{ steps.build-push-action.outputs.digest }}
+      test-output1: ${{ steps.build-push-action.outputs.digest }}
     needs:
       - get-tags
    #   - make-tests
@@ -136,7 +136,7 @@ jobs:
       run: |
         # echo "::set-output name=image_digest_apko::${{ steps.build-push-action.outputs.digest }}"
         # echo APKO_DIGEST=${{ steps.build-push-action.outputs.digest }} >> "$GITHUB_OUTPUT"
-        echo "out1=Your Output1" >> $GITHUB_OUTPUT
+        echo "digest=Your Output1" >> $GITHUB_OUTPUT
 
     - name: 'Save Digest to file digest.txt'
       run: |
