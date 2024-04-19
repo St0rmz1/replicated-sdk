@@ -96,7 +96,8 @@ jobs:
     runs-on: 'ubuntu-22.04'
     outputs:
     # IMAGE_DIGEST_NAME_FROM_APKO: ${{ steps.build-push-action.outputs.digest }}
-      image_digest_foo: ${{ steps.build-push-action.outputs.digest }}
+      #image-digest-foo: ${{ steps.build-push-action.outputs.digest }}
+      image-digest-foo: 'foo temp value'
     needs:
       - get-tags
    #   - make-tests
@@ -169,7 +170,7 @@ jobs:
       # digest: "${{ env.IMAGE_DIGEST_FROM_APKO}}"
       # set digest to be the value of the variable IMAGE_DIGEST_FROM_APKO
       # digest: ${{ vars.IMAGE_DIGEST_FROM_APKO }}
-      digest: ${{ needs.package-and-publish.outputs.image_digest_foo}}
+      digest: ${{ needs.package-and-publish.outputs.image-digest-foo}}
 
 
 
