@@ -151,8 +151,8 @@ jobs:
     with:
       image: index.docker.io/st0rmz1/replicated-sdk:v${{needs.get-tags.outputs.tag}}
       digest: ${{ needs.package-and-publish.outputs.image_digest_apko }}
-      registry-username: ${{ secrets.DOCKERHUB_USER }}
     secrets:
+      registry-username: ${{ secrets.DOCKERHUB_USER }}
       registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
     
     
