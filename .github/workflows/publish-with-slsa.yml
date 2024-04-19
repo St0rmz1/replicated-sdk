@@ -96,8 +96,8 @@ jobs:
     runs-on: 'ubuntu-22.04'
     outputs:
     # IMAGE_DIGEST_NAME_FROM_APKO: ${{ steps.build-push-action.outputs.digest }}
-      #image-digest-foo: ${{ steps.build-push-action.outputs.digest }}
-      image-digest-foo: 'foo temp value'
+      image-digest-foo: ${{ steps.build-push-action.outputs.digest }}
+      # image-digest-foo: 'foo temp value'
     needs:
       - get-tags
    #   - make-tests
