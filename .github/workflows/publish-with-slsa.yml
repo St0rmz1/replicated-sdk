@@ -149,7 +149,7 @@ jobs:
       id: print-digest
       run: |
         echo "DEBUG build-push-action:steps.build-push-action.outputs.digest: ${{ steps.build-push-action.outputs.digest }}"
-        echo $IMAGE_DIGEST_NAME_FROM_APKO
+        echo "DEBUG print the env variable: $IMAGE_DIGEST_NAME_FROM_APKO"
 
   provenance: 
     needs:
