@@ -137,7 +137,7 @@ jobs:
     - name: 'Assign1'
       id: save-digest1
       run: |
-        echo "::set-output name=digest::${{ steps.build-push-action.outputs.digest }}"
+        echo "::set-output name=IMAGE_DIGEST_NAME_FROM_APKO::${{ steps.build-push-action.outputs.digest }}"
 
     - name: 'Assign2'
       id: save-digest2
