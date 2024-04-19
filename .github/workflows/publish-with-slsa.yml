@@ -167,7 +167,7 @@ jobs:
       # digest: "${{ needs.package-and-publish.outputs.test-output1 }}"
 #      digest: "${{ env.IMAGE_DIGEST_FROM_APKO}}"
       # set digest to be the value of the variable IMAGE_DIGEST_FROM_APKO
-      digest: ${{ IMAGE_DIGEST_FROM_APKO }}
+      digest: ${{ vars.IMAGE_DIGEST_FROM_APKO }}
 
 
 
