@@ -1,0 +1,34 @@
+# workflows/publish-with-slsa.yml
+name: 'TINY TEST Publish with SLSA'
+on:
+  workflow_dispatch:
+jobs:
+  package-and-publish:
+    runs-on: 'ubuntu-22.04'
+    outputs:
+      image-digest: ${{ steps.fake-build-push-action.outputs.digest }}
+    steps:
+
+    - name: 'Fake build-push-action'
+      id: fake-build-push-action
+      # this job outputs image-digest from the fake-build-push-action.outputs.digest. Set a value for the digest.
+      run: |
+        echo "::set-output name=digest::sha256:fake-digest-value"
+        echo "::set-output name=image-name::fake-image-name"
+
+
+  provenance: 
+    runs-on: 'ubuntu-22.04'
+    needs:
+      - package-and-publish
+    permissions:
+      actions: read # for detecting the Github Actions environment.
+      id-token: write # for creating OIDC tokens for signing.
+      packages: write # for uploading attestations.
+    steps:
+      - name: 'Fake slsa-github-generator'
+        id: fake-slsa-github-generator
+        run: |
+          echo "image digest from package-and-publish: ${{ needs.package-and-publish.outputs.image-digest }}"
+          echo "image name from package-and-publish: ${{ needs.package-and-publish.outputs.image-name }}"
+
