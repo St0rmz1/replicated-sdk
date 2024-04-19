@@ -95,9 +95,7 @@ jobs:
   package-and-publish:
     runs-on: 'ubuntu-22.04'
     outputs:
-    # IMAGE_DIGEST_NAME_FROM_APKO: ${{ steps.build-push-action.outputs.digest }}
       image-digest-foo: ${{ steps.build-push-action.outputs.digest }}
-      # image-digest-foo: 'foo temp value'
     needs:
       - get-tags
    #   - make-tests
@@ -140,12 +138,12 @@ jobs:
     #  Make image-digest-foo = steps.build-push-action.outputs.digest
     - name: 'Assign'
       id: save-digest
+      # 
+      # Then test with
+      #         echo "::set-output name=digest::VARIABLE NAME"
       run: |
-        echo "image-digest-foo=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
-        source $GITHUB_ENV
-        # image-digest-foo=${{ steps.build-push-action.outputs.digest }}
-        # image-digest-foo="${{ steps.build-push-action.outputs.digest }}"
-        echo "image-digest-foo=${{ env.image-digest-foo }}"
+        echo "::set-output name=digest::sha256:fake-digest-value"
+        
 
 
     # - name: 'Confirm we got the digest as an output'
