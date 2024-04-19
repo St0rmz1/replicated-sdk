@@ -137,19 +137,19 @@ jobs:
     - name: 'Assign1'
       id: save-digest1
       run: |
-        echo "::set-output name=IMAGE_DIGEST_NAME_FROM_APKO::${{ steps.build-push-action.outputs.digest }}"
+        echo "::set-output name=IMAGE_DIGEST_FROM_APKO::${{ steps.build-push-action.outputs.digest }}"
 
     - name: 'Assign2'
       id: save-digest2
       run: |
-        echo "IMAGE_DIGEST_NAME_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
+        echo "IMAGE_DIGEST_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
 
     - name: 'confirm digest is now in env variable'
-    # Print the digest in IMAGE_DIGEST_NAME_FROM_APKO
+    # Print the digest in IMAGE_DIGEST_FROM_APKO
       id: print-digest
       run: |
         echo "DEBUG build-push-action:steps.build-push-action.outputs.digest: ${{ steps.build-push-action.outputs.digest }}"
-        echo "DEBUG print the env variable: $IMAGE_DIGEST_NAME_FROM_APKO"
+        echo "DEBUG print the env variable: $IMAGE_DIGEST_FROM_APKO"
 
   provenance: 
     needs:
@@ -165,7 +165,7 @@ jobs:
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
       # digest: ${{ needs.save-digest.outputs.image_digest_apko }}
       # digest: "${{ needs.package-and-publish.outputs.test-output1 }}"
-      digest: $IMAGE_DIGEST_NAME_FROM_APKO
+      digest: $IMAGE_DIGEST_FROM_APKO
 
 
 
