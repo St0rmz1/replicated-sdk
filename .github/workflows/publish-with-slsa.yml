@@ -94,8 +94,9 @@ jobs:
 
   package-and-publish:
     runs-on: 'ubuntu-22.04'
-    # outputs:
+    outputs:
     # IMAGE_DIGEST_NAME_FROM_APKO: ${{ steps.build-push-action.outputs.digest }}
+      image_digest_foo: ${{ steps.build-push-action.outputs.digest }}
     needs:
       - get-tags
    #   - make-tests
@@ -165,9 +166,10 @@ jobs:
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
       # digest: ${{ needs.save-digest.outputs.image_digest_apko }}
       # digest: "${{ needs.package-and-publish.outputs.test-output1 }}"
-#      digest: "${{ env.IMAGE_DIGEST_FROM_APKO}}"
+      # digest: "${{ env.IMAGE_DIGEST_FROM_APKO}}"
       # set digest to be the value of the variable IMAGE_DIGEST_FROM_APKO
-      digest: ${{ vars.IMAGE_DIGEST_FROM_APKO }}
+      # digest: ${{ vars.IMAGE_DIGEST_FROM_APKO }}
+      digest: ${{ needs.package-and-publish.outputs.image_digest_foo}}
 
 
 
