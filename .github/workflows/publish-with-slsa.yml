@@ -94,8 +94,8 @@ jobs:
 
   package-and-publish:
     runs-on: 'ubuntu-22.04'
-    outputs:
-      IMAGE_DIGEST_NAME_FROM_APKO: ${{ steps.build-push-action.outputs.digest }}
+    # outputs:
+    # IMAGE_DIGEST_NAME_FROM_APKO: ${{ steps.build-push-action.outputs.digest }}
     needs:
       - get-tags
    #   - make-tests
@@ -130,17 +130,26 @@ jobs:
         registry-username: ${{ secrets.DOCKERHUB_USER }}
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: 'DEBUG PRINT DIGEST'
+    - name: 'Confirm we have a digest from build-push-action'
+      run: |
+        echo "image digest from build-push-action: ${{ steps.build-push-action.outputs.digest }}"
+
+    - name: 'Assign1'
+      id: save-digest1
+      run: |
+        echo "::set-output name=digest::${{ steps.build-push-action.outputs.digest }}"
+
+    - name: 'Assign2'
+      id: save-digest2
+      run: |
+        echo "IMAGE_DIGEST_NAME_FROM_APKO: ${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
+
+    - name: 'confirm digest is now in env variable'
     # Print the digest in IMAGE_DIGEST_NAME_FROM_APKO
       id: print-digest
       run: |
+        echo "DEBUG build-push-action:steps.build-push-action.outputs.digest: ${{ steps.build-push-action.outputs.digest }}"
         echo $IMAGE_DIGEST_NAME_FROM_APKO
-
-    - name: 'Save Digest to file digest.txt'
-      run: |
-        echo ${{ steps.build-push-action.outputs.digest }} > digest.txt
-        cat digest.txt
-
 
   provenance: 
     needs:
