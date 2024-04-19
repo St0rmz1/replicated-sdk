@@ -164,7 +164,8 @@ jobs:
     with: 
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
       # digest: ${{ needs.save-digest.outputs.image_digest_apko }}
-      digest: "${{ needs.package-and-publish.outputs.test-output1 }}"
+      # digest: "${{ needs.package-and-publish.outputs.test-output1 }}"
+      digest: $IMAGE_DIGEST_NAME_FROM_APKO
 
 
 
