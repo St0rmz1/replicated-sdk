@@ -142,8 +142,10 @@ jobs:
       id: save-digest
       run: |
         echo "image-digest-foo=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
-        #image-digest-foo=${{ steps.build-push-action.outputs.digest }}
-        image-digest-foo="${{ steps.build-push-action.outputs.digest }}"
+        source $GITHUB_ENV
+        # image-digest-foo=${{ steps.build-push-action.outputs.digest }}
+        # image-digest-foo="${{ steps.build-push-action.outputs.digest }}"
+        echo "image-digest-foo=${{ env.image-digest-foo }}"
 
 
     # - name: 'Confirm we got the digest as an output'
