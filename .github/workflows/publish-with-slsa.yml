@@ -12,14 +12,14 @@ on:
 #
 # Remove PACT for testing
 #
-# env:
+env:
 #  PACT_VERSION: ${{ github.ref_name }}
 #  PACT_BROKER_BASE_URL: ${{ vars.PACT_BROKER_BASE_URL }}
 #  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+   IMAGE_DIGEST_FROM_APKO: 'default-digest-value'
+   IMAGE_NAME_FROM_APKO: 'default-name-value'
 
 jobs:
- # env:
-    # IMAGE_DIGEST_FROM_APKO: 'false'
   get-tags:
     runs-on: ubuntu-22.04
     outputs:
@@ -95,8 +95,7 @@ jobs:
   package-and-publish:
     runs-on: 'ubuntu-22.04'
     outputs:
-      # image_digest_apko: ${{ steps.build-push-action.outputs.digest }}
-      test-output1: ${{ steps.build-push-action.outputs.digest }}
+      IMAGE_DIGEST_NAME_FROM_APKO: ${{ steps.build-push-action.outputs.digest }}
     needs:
       - get-tags
    #   - make-tests
@@ -131,12 +130,11 @@ jobs:
         registry-username: ${{ secrets.DOCKERHUB_USER }}
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: 'Save digest'
-      id: save-digest
+    - name: 'DEBUG PRINT DIGEST'
+    # Print the digest in IMAGE_DIGEST_NAME_FROM_APKO
+      id: print-digest
       run: |
-        # echo "::set-output name=image_digest_apko::${{ steps.build-push-action.outputs.digest }}"
-        # echo APKO_DIGEST=${{ steps.build-push-action.outputs.digest }} >> "$GITHUB_OUTPUT"
-        echo "digest=Your Output1" >> $GITHUB_OUTPUT
+        echo $IMAGE_DIGEST_NAME_FROM_APKO
 
     - name: 'Save Digest to file digest.txt'
       run: |
@@ -156,9 +154,6 @@ jobs:
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with: 
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-      # digest: ${{ needs.package-and-publish.outputs.image_digest_apko }}
-      # digest: ${{ steps.save-digest.outputs.APKO_DIGEST }}
-      # digest: is the value of APKO_DIGEST that we put in GITHUB_OUTPUT from line 137
       # digest: ${{ needs.save-digest.outputs.image_digest_apko }}
       digest: "${{ needs.package-and-publish.outputs.test-output1 }}"
 
