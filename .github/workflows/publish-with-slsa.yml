@@ -142,7 +142,7 @@ jobs:
     - name: 'Assign2'
       id: save-digest2
       run: |
-        echo "IMAGE_DIGEST_NAME_FROM_APKO: ${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
+        echo "IMAGE_DIGEST_NAME_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
 
     - name: 'confirm digest is now in env variable'
     # Print the digest in IMAGE_DIGEST_NAME_FROM_APKO
