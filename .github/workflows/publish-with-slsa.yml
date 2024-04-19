@@ -133,25 +133,33 @@ jobs:
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: 'Confirm we have a digest from build-push-action'
+      id: print1
       run: |
         echo "image digest from build-push-action: ${{ steps.build-push-action.outputs.digest }}"
 
-    - name: 'Assign1'
-      id: save-digest1
+    #  Make image-digest-foo = steps.build-push-action.outputs.digest
+    - name: 'Assign'
+      id: save-digest
       run: |
-        echo "::set-output name=IMAGE_DIGEST_FROM_APKO::${{ steps.build-push-action.outputs.digest }}"
+        echo "image-digest-foo=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
 
-    - name: 'Assign2'
-      id: save-digest2
-      run: |
-        echo "IMAGE_DIGEST_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
 
-    - name: 'confirm digest is now in env variable'
+    # - name: 'Confirm we got the digest as an output'
+    #  id: printx
+    #  run: |
+    #    echo "::set-output name=IMAGE_DIGEST_FROM_APKO::${{ steps.build-push-action.outputs.digest }}"
+
+    # - name: 'Assign2'
+    #  id: save-digest2
+    #  run: |
+    #    echo "IMAGE_DIGEST_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
+
+    # - name: 'confirm digest is now in env variable'
     # Print the digest in IMAGE_DIGEST_FROM_APKO
-      id: print-digest
-      run: |
-        echo "DEBUG build-push-action:steps.build-push-action.outputs.digest: ${{ steps.build-push-action.outputs.digest }}"
-        echo "DEBUG print the env variable: $IMAGE_DIGEST_FROM_APKO"
+    #  id: print-digest
+    #  run: |
+    #    echo "DEBUG build-push-action:steps.build-push-action.outputs.digest: ${{ steps.build-push-action.outputs.digest }}"
+    #    echo "DEBUG print the env variable: $IMAGE_DIGEST_FROM_APKO"
 
   provenance: 
     needs:
