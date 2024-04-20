@@ -14,7 +14,7 @@ jobs:
       id: fake-build-push-action
       # this job outputs image-digest from the fake-build-push-action.outputs.digest. Set a value for the digest.
       run: |
-        echo "::set-output name=digest::sha256:fake-digest-value"
+        echo "::set-output name=digest::sha256:bf0382a8683bd43c976b528e508f5ccb376b9c58ab2de0aa340ed1d10c11bba9"
         echo "::set-output name=image-name::fake-image-name"
 
 
