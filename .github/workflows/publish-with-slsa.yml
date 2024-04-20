@@ -95,7 +95,7 @@ jobs:
   package-and-publish:
     runs-on: 'ubuntu-22.04'
     outputs:
-      image-digest-foo: ${{ steps.build-push-action.outputs.digest }}
+      digest: ${{ steps.build-push-action.outputs.digest }}
     needs:
       - get-tags
    #   - make-tests
@@ -135,48 +135,10 @@ jobs:
       run: |
         echo "image digest from build-push-action: ${{ steps.build-push-action.outputs.digest }}"
 
-    #  Make image-digest-foo = steps.build-push-action.outputs.digest
     - name: 'Assign'
       id: save-digest
-      # 
-      # Then test with
-      #         echo "::set-output name=digest::VARIABLE NAME"
       run: |
         echo "::set-output name=digest::sha256:fake-digest-value"
-        
-
-
-    # - name: 'Confirm we got the digest as an output'
-    #  id: printx
-    #  run: |
-    #    echo "::set-output name=IMAGE_DIGEST_FROM_APKO::${{ steps.build-push-action.outputs.digest }}"
-
-    # - name: 'Assign2'
-    #  id: save-digest2
-    #  run: |
-    #    echo "IMAGE_DIGEST_FROM_APKO=${{ steps.build-push-action.outputs.digest }}" >> $GITHUB_ENV
-
-    # - name: 'confirm digest is now in env variable'
-    # Print the digest in IMAGE_DIGEST_FROM_APKO
-    #  id: print-digest
-    #  run: |
-    #    echo "DEBUG build-push-action:steps.build-push-action.outputs.digest: ${{ steps.build-push-action.outputs.digest }}"
-    #    echo "DEBUG print the env variable: $IMAGE_DIGEST_FROM_APKO"
-
-  
- #
- # test job which prints the image-digest-foo from package-and-publish
- #
-  tester-new-job:
-    runs-on: ubuntu-22.04
-    needs:
-      - package-and-publish
-    steps:
-      - name: 'Confirm we have a digest from package-and-publish'
-        id: print2
-        run: |
-          echo "image digest from package-and-publish: ${{ needs.package-and-publish.outputs.image-digest-foo }}"
-
 
   provenance: 
     needs:
@@ -190,15 +152,7 @@ jobs:
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with: 
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-      # digest: ${{ needs.save-digest.outputs.image_digest_apko }}
-      # digest: "${{ needs.package-and-publish.outputs.test-output1 }}"
-      # digest: ${{ needs.package-and-publish.outputs.image-digest-foo}}
-      # digest: "${{ env.IMAGE_DIGEST_FROM_APKO}}"
-      # set digest to be the value of the variable IMAGE_DIGEST_FROM_APKO
-      # digest: ${{ vars.IMAGE_DIGEST_FROM_APKO }}
-      # Why is the digest not being set?
-      # make the digest with value = the image-digest-foo from package-and-publish
-      digest: ${{ needs.package-and-publish.outputs.image-digest-foo }}
+      digest: ${{ needs.package-and-publish.outputs.digest }}
 
 
 
