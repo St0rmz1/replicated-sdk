@@ -7,6 +7,7 @@ jobs:
     runs-on: 'ubuntu-22.04'
     outputs:
       image-digest: ${{ steps.fake-build-push-action.outputs.digest }}
+      image-name: ${{ steps.fake-build-push-action.outputs.image-name }}
     steps:
 
     - name: 'Fake build-push-action'
@@ -18,17 +19,13 @@ jobs:
 
 
   provenance: 
-    runs-on: 'ubuntu-22.04'
     needs:
       - package-and-publish
     permissions:
       actions: read # for detecting the Github Actions environment.
       id-token: write # for creating OIDC tokens for signing.
       packages: write # for uploading attestations.
-    steps:
-      - name: 'Fake slsa-github-generator'
-        id: fake-slsa-github-generator
-        run: |
-          echo "image digest from package-and-publish: ${{ needs.package-and-publish.outputs.image-digest }}"
-          echo "image name from package-and-publish: ${{ needs.package-and-publish.outputs.image-name }}"
-
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+    with: 
+      digest: ${{ needs.package-and-publish.outputs.image-digest }}
+      image: ${{ needs.package-and-publish.outputs.image-name }}
