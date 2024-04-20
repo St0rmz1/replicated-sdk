@@ -163,6 +163,21 @@ jobs:
     #    echo "DEBUG build-push-action:steps.build-push-action.outputs.digest: ${{ steps.build-push-action.outputs.digest }}"
     #    echo "DEBUG print the env variable: $IMAGE_DIGEST_FROM_APKO"
 
+  
+ #
+ # test job which prints the image-digest-foo from package-and-publish
+ #
+  tester-new-job:
+    runs-on: ubuntu-22.04
+    needs:
+      - package-and-publish
+    steps:
+      - name: 'Confirm we have a digest from package-and-publish'
+        id: print2
+        run: |
+          echo "image digest from package-and-publish: ${{ needs.package-and-publish.outputs.image-digest-foo }}"
+
+
   provenance: 
     needs:
       - package-and-publish
@@ -177,10 +192,15 @@ jobs:
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
       # digest: ${{ needs.save-digest.outputs.image_digest_apko }}
       # digest: "${{ needs.package-and-publish.outputs.test-output1 }}"
+      # digest: ${{ needs.package-and-publish.outputs.image-digest-foo}}
       # digest: "${{ env.IMAGE_DIGEST_FROM_APKO}}"
       # set digest to be the value of the variable IMAGE_DIGEST_FROM_APKO
       # digest: ${{ vars.IMAGE_DIGEST_FROM_APKO }}
-      digest: ${{ needs.package-and-publish.outputs.image-digest-foo}}
+      # Why is the digest not being set?
+      # make the digest with value = the image-digest-foo from package-and-publish
+      digest: ${{ needs.package-and-publish.outputs.image-digest-foo }}
+
+
 
 
 
