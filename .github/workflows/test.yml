@@ -19,21 +19,13 @@ jobs:
 
 
   provenance: 
-        needs:
-          - package-and-publish
-        permissions:
-          actions: read # for detecting the Github Actions environment.
-          id-token: write # for creating OIDC tokens for signing.
-          packages: write # for uploading attestations.
-        runs-on: ubuntu-latest // Add the missing 'runs-on' property with a valid value.
-        steps:
-        - name: 'Confirm we have a digest from package-and-publish'
-          id: print2
-          run: |
-           echo "image digest from package-and-publish: ${{ needs.package-and-publish.outputs.image-digest }}" 
-            
-        - name: 'SLSA Container'
-          uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
-          with: 
-            image: ${{ needs.package-and-publish.outputs.image-name }}
-            digest: ${{ needs.package-and-publish.outputs.image-digest }}
+    needs:
+      - package-and-publish
+    permissions:
+      actions: read # for detecting the Github Actions environment.
+      id-token: write # for creating OIDC tokens for signing.
+      packages: write # for uploading attestations.
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+    with: 
+      image: ${{ needs.package-and-publish.outputs.image-name }}
+      digest: ${{ needs.package-and-publish.outputs.image-digest }}

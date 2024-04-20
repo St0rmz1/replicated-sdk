@@ -31,11 +31,8 @@ jobs:
   provenance:
     needs:
       - provenance-setup
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Call reusable workflow for provenance
-        uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
-        with:
-          image: ${{ env.IMAGE_NAME }}
-          digest: ${{ env.IMAGE_DIGEST }}
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+    with:
+     image: ${{ env.IMAGE_NAME }}
+     digest: ${{ env.IMAGE_DIGEST }}
 
