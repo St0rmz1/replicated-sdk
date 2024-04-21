@@ -12,10 +12,11 @@ on:
 #
 # Remove PACT for testing
 #
-# env:
+env:
 #  PACT_VERSION: ${{ github.ref_name }}
 #  PACT_BROKER_BASE_URL: ${{ vars.PACT_BROKER_BASE_URL }}
 #  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+  GITHUB_image_digest: 'foo'
 
 jobs:
   get-tags:
@@ -140,8 +141,9 @@ jobs:
         script: |
           const fullDigest = "${{ steps.build-push-action.outputs.digest }}";
           const digest = fullDigest.split('@')[1];
-          console.log(digest);
-          core.setOutput("digest", digest);
+          const encodedDigest = Buffer.from(digest).toString('base64');
+          console.log(encodedDigest);
+          core.setOutput("GITHUB_image_digest", encodedDigest);
       # run: |
       #  echo "::set-output name=digest::sha256:fake-digest-value"
       # action script example:
@@ -159,7 +161,8 @@ jobs:
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with: 
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-      digest: ${{ needs.package-and-publish.outputs.digest }}
+      # digest: ${{ needs.package-and-publish.outputs.digest }}
+      digest: ${{ env.GITHUB_image_digest}}
 
 
 
