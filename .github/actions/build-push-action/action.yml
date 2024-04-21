@@ -67,7 +67,8 @@ runs:
         generic-pass: ${{ inputs.registry-password }}
 
     - name: Echo digest
-      continue-on-error: true
+      continue-on-error: false
       shell: bash
       run: |
         echo "  Build-Push-Action The digest of the published image is ${{ steps.apko-publish.outputs.digest }}"
+        echo "::set-output name=digest::${{ steps.apko-publish.outputs.digest }}"

@@ -12,11 +12,10 @@ on:
 #
 # Remove PACT for testing
 #
-env:
+# env:
 #  PACT_VERSION: ${{ github.ref_name }}
 #  PACT_BROKER_BASE_URL: ${{ vars.PACT_BROKER_BASE_URL }}
 #  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-  GITHUB_IMAGE_D: 'foo'
 
 jobs:
   get-tags:
@@ -94,7 +93,8 @@ jobs:
   package-and-publish:
     runs-on: 'ubuntu-22.04'
     outputs:
-      digest: ${{ steps.build-push-action.outputs.digest }}
+      # digest: ${{ steps.build-push-action.outputs.digest }}
+      digest: ${{ steps.trim-and-save-digest.outputs.digest }}
     needs:
       - get-tags
    #   - make-tests
@@ -130,12 +130,12 @@ jobs:
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: 'Confirm we have a digest from build-push-action'
-      id: print1
+      id: debug-confirm-digest-from-build-push-action
       run: |
         echo "image digest from build-push-action: ${{ steps.build-push-action.outputs.digest }}"
 
-    - name: 'Save Digest'
-      id: save-digest
+    - name: 'Trim and Save Digest'
+      id: trim-and-save-digest
       uses: actions/github-script@v7
       with:
         script: |
@@ -143,11 +143,7 @@ jobs:
           const digest = fullDigest.split('@')[1];
           const encodedDigest = Buffer.from(digest).toString('base64');
           console.log(encodedDigest);
-          core.setOutput("GITHUB_IMAGE_D", encodedDigest);
-      # run: |
-      #  echo "::set-output name=digest::sha256:fake-digest-value"
-      # action script example:
-      # core.setOutput("digest", "${{ steps.build-push-action.outputs.digest }}")
+          core.setOutput("digest", encodedDigest);
 
   provenance: 
     needs:
@@ -161,8 +157,8 @@ jobs:
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with: 
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-      # digest: ${{ needs.package-and-publish.outputs.digest }}
-      digest: $GITHUB_IMAGE_D
+      # digest: "foo"
+      digest: ${{ needs.package-and-publish.outputs.digest }}
 
 
 
