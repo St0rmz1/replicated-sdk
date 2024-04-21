@@ -22,8 +22,20 @@ jobs:
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
     
     # print digest from fake-build-push-action.outputs.digest
-    - name: 'Print digest from fake-build-push-action.outputs.digest'
+    - name: 'Print digest from within the package-and-publish job fake-build-push-action.outputs.digest'
       run: echo ${{ steps.fake-build-push-action.outputs.digest }}
+
+  fake-provenance:
+    needs: package-and-publish
+    # print the package-and-publish job's output digest
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - run: |
+       echo "Print digest in fake-provenance job from package-and-publish job's output digest"
+       echo ${{ needs.package-and-publish.outputs.digest }}
+
 
 
 
