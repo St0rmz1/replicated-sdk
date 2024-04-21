@@ -18,20 +18,29 @@ jobs:
       with:
         context: deploy
         image-name: index.docker.io/st0rmz1/replicated-sdk:v
+        registry-username: ${{ secrets.DOCKERHUB_USER }}
+        registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    
+    # print digest from fake-build-push-action.outputs.digest
+    - name: 'Print digest from fake-build-push-action.outputs.digest'
+      run: echo ${{ steps.fake-build-push-action.outputs.digest }}
+
+
+
 
       # run: |
       #  echo "::set-output name=digest::sha256:bf0382a8683bd43c976b528e508f5ccb376b9c58ab2de0aa340ed1d10c11bba9"
       #  echo "::set-output name=image-name::fake-image-name"
 
 
-  provenance: 
-    needs:
-      - package-and-publish
-    permissions:
-      actions: read # for detecting the Github Actions environment.
-      id-token: write # for creating OIDC tokens for signing.
-      packages: write # for uploading attestations.
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
-    with: 
-      image: ${{ needs.package-and-publish.outputs.image-name }}
-      digest: ${{ needs.package-and-publish.outputs.image-digest }}
+#  provenance: 
+#    needs:
+#      - package-and-publish
+#    permissions:
+#      actions: read # for detecting the Github Actions environment.
+#      id-token: write # for creating OIDC tokens for signing.
+#      packages: write # for uploading attestations.
+#    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+#    with: 
+#      image: ${{ needs.package-and-publish.outputs.image-name }}
+#      digest: ${{ needs.package-and-publish.outputs.image-digest }}
