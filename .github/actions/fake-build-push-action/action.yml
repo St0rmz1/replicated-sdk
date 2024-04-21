@@ -2,20 +2,45 @@
 name: 'Fake Build and Push'
 description: 'Fake action to simulate building and pushing an image'
 inputs:
+  context:
+    description: 'Path to the context directory'
+    required: false
+
   image-name:
     description: 'Full destination image name'
-    required: true
+    required: false
+
+  git-tag:
+    description: 'Git tag'
+    required: false
+
+  registry-username:
+    description: 'Username to login to registry'
+    default: ''
+    required: false
+
+  registry-password:
+    description: 'Password to login to registry'
+    default: ''
+    required: false
+
 outputs:
   digest:
-    value: 'sha256:bf0382a8683bd43c976b528e508f5ccb376b9c58ab2de0aa340ed1d10c11bba9'
+    value: ${{ steps.fake-apko-publish.outputs.digest }}
     description: |
-      The digest of the published container image.
+      The digest of the published container image. 
+
+
+#    value: 'sha256:bf0382a8683bd43c976b528e508f5ccb376b9c58ab2de0aa340ed1d10c11bba9'
+#    description: |
+#      The digest of the published container image.
 runs:
   using: "composite"
   steps:
-    - name: 'Fake build and push'
+    - name: 'Fake apko publish'
+      id: fake-apko-publish 
       shell: bash
+      # echo "::set-output name=image-name::fake-image-name"
       run: |
         echo "::set-output name=digest::sha256:bf0382a8683bd43c976b528e508f5ccb376b9c58ab2de0aa340ed1d10c11bba9"
-        echo "::set-output name=image-name::fake-image-name"
 
