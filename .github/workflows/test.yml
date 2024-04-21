@@ -25,16 +25,16 @@ jobs:
     - name: 'Print digest from within the package-and-publish job fake-build-push-action.outputs.digest'
       run: echo ${{ steps.fake-build-push-action.outputs.digest }}
 
-  fake-provenance:
-    needs: package-and-publish
-    # print the package-and-publish job's output digest
-    runs-on: ubuntu-22.04
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - run: |
-       echo "Print digest in fake-provenance job from package-and-publish job's output digest"
-       echo ${{ needs.package-and-publish.outputs.digest }}
+#  fake-provenance:
+#    needs: package-and-publish
+#    # print the package-and-publish job's output digest
+#    runs-on: ubuntu-22.04
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v4
+#    - run: |
+#       echo "Print digest in fake-provenance job from package-and-publish job's output digest"
+#       echo ${{ needs.package-and-publish.outputs.digest }}
 
 
 
@@ -45,14 +45,14 @@ jobs:
       #  echo "::set-output name=image-name::fake-image-name"
 
 
-#  provenance: 
-#    needs:
-#      - package-and-publish
+  provenance: 
+    needs:
+      - package-and-publish
 #    permissions:
 #      actions: read # for detecting the Github Actions environment.
 #      id-token: write # for creating OIDC tokens for signing.
 #      packages: write # for uploading attestations.
-#    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
-#    with: 
-#      image: ${{ needs.package-and-publish.outputs.image-name }}
-#      digest: ${{ needs.package-and-publish.outputs.image-digest }}
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
+    with: 
+      image: ${{ needs.package-and-publish.outputs.image-name }}
+      digest: ${{ needs.package-and-publish.outputs.digest }}
