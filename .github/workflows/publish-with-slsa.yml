@@ -16,7 +16,7 @@ env:
 #  PACT_VERSION: ${{ github.ref_name }}
 #  PACT_BROKER_BASE_URL: ${{ vars.PACT_BROKER_BASE_URL }}
 #  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-  GITHUB_image_digest: 'foo'
+  GITHUB_IMAGE_D: 'foo'
 
 jobs:
   get-tags:
@@ -143,7 +143,7 @@ jobs:
           const digest = fullDigest.split('@')[1];
           const encodedDigest = Buffer.from(digest).toString('base64');
           console.log(encodedDigest);
-          core.setOutput("GITHUB_image_digest", encodedDigest);
+          core.setOutput("GITHUB_IMAGE_D", encodedDigest);
       # run: |
       #  echo "::set-output name=digest::sha256:fake-digest-value"
       # action script example:
@@ -162,7 +162,7 @@ jobs:
     with: 
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
       # digest: ${{ needs.package-and-publish.outputs.digest }}
-      digest: ${{ env.GITHUB_image_digest}}
+      digest: $GITHUB_IMAGE_D
 
 
 
