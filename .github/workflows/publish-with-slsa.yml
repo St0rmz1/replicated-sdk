@@ -16,8 +16,6 @@ env:
 #  PACT_VERSION: ${{ github.ref_name }}
 #  PACT_BROKER_BASE_URL: ${{ vars.PACT_BROKER_BASE_URL }}
 #  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-   IMAGE_DIGEST_FROM_APKO: 'default-digest-value'
-   IMAGE_NAME_FROM_APKO: 'default-name-value'
 
 jobs:
   get-tags:
@@ -140,9 +138,14 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          core.setOutput("digest", "${{ steps.build-push-action.outputs.digest }}")
+          const full-digest = "${{ steps.build-push-action.outputs.digest }}";
+          const digest = full-digest.split('@')[1];
+          console.log(digest);
+          core.setOutput("digest", digest);
       # run: |
       #  echo "::set-output name=digest::sha256:fake-digest-value"
+      # action script example:
+      # core.setOutput("digest", "${{ steps.build-push-action.outputs.digest }}")
 
   provenance: 
     needs:
