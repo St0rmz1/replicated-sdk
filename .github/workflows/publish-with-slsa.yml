@@ -135,10 +135,14 @@ jobs:
       run: |
         echo "image digest from build-push-action: ${{ steps.build-push-action.outputs.digest }}"
 
-    - name: 'Assign'
+    - name: 'Save Digest'
       id: save-digest
-      run: |
-        echo "::set-output name=digest::sha256:fake-digest-value"
+      uses: actions/github-script@v7
+      with:
+        script: |
+          core.setOutput("digest", "${{ steps.build-push-action.outputs.digest }}")
+      # run: |
+      #  echo "::set-output name=digest::sha256:fake-digest-value"
 
   provenance: 
     needs:
