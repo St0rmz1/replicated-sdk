@@ -9,6 +9,8 @@ jobs:
       image-digest: ${{ steps.fake-build-push-action.outputs.digest }}
       image-name: ${{ steps.fake-build-push-action.outputs.image-name }}
     steps:
+    - name: Checkout
+      uses: actions/checkout@v4
 
     - uses: ./.github/actions/fake-build-push-action
       id: fake-build-push-action
