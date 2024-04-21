@@ -137,13 +137,14 @@ jobs:
     - name: 'Trim and Save Digest'
       id: trim-and-save-digest
       uses: actions/github-script@v7
+      # const encodedDigest = Buffer.from(digest).toString('base64');
       with:
         script: |
           const fullDigest = "${{ steps.build-push-action.outputs.digest }}";
           const digest = fullDigest.split('@')[1];
-          const encodedDigest = Buffer.from(digest).toString('base64');
-          console.log(encodedDigest);
-          core.setOutput("digest", encodedDigest);
+          console.log(fullDigest);
+          console.log(digest);
+          core.setOutput("digest", digest);
 
   provenance: 
     needs:
