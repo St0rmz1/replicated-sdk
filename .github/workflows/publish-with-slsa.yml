@@ -12,7 +12,7 @@ on:
 #
 # Remove PACT for testing
 #
-env:
+# env:
 #  PACT_VERSION: ${{ github.ref_name }}
 #  PACT_BROKER_BASE_URL: ${{ vars.PACT_BROKER_BASE_URL }}
 #  PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
