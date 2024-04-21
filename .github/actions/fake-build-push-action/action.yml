@@ -41,6 +41,8 @@ runs:
       id: fake-apko-publish 
       shell: bash
       # echo "::set-output name=image-name::fake-image-name"
+      # index.docker.io/***/replicated-sdk@sha256:2786a224b77b72ad7b4938b16e2e73aa5cee5541a649cfe3ef84f607e734280c
+      #  echo "::set-output name=digest::sha256:bf0382a8683bd43c976b528e508f5ccb376b9c58ab2de0aa340ed1d10c11bba9"
       run: |
-        echo "::set-output name=digest::sha256:bf0382a8683bd43c976b528e508f5ccb376b9c58ab2de0aa340ed1d10c11bba9"
+        echo "::set-output name=digest::index.docker.io/St0rmz1replicated-sdk@sha256:2786a224b77b72ad7b4938b16e2e73aa5cee5541a649cfe3ef84f607e734280c"
 
