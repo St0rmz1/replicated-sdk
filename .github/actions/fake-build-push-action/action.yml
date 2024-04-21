@@ -1,0 +1,21 @@
+# fake-build-push-action/action.yml
+name: 'Fake Build and Push'
+description: 'Fake action to simulate building and pushing an image'
+inputs:
+  image-name:
+    description: 'Full destination image name'
+    required: true
+outputs:
+  digest:
+    value: 'sha256:bf0382a8683bd43c976b528e508f5ccb376b9c58ab2de0aa340ed1d10c11bba9'
+    description: |
+      The digest of the published container image.
+runs:
+  using: "composite"
+  steps:
+    - name: 'Fake build and push'
+      shell: bash
+      run: |
+        echo "::set-output name=digest::sha256:bf0382a8683bd43c976b528e508f5ccb376b9c58ab2de0aa340ed1d10c11bba9"
+        echo "::set-output name=image-name::fake-image-name"
+
