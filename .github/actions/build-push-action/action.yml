@@ -68,7 +68,7 @@ runs:
 
     - name: Echo digest
       continue-on-error: false
+        #echo "::set-output name=digest::${{ steps.apko-publish.outputs.digest }}"
       shell: bash
       run: |
         echo "  Build-Push-Action The digest of the published image is ${{ steps.apko-publish.outputs.digest }}"
-        echo "::set-output name=digest::${{ steps.apko-publish.outputs.digest }}"

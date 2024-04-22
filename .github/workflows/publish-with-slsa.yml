@@ -93,7 +93,6 @@ jobs:
   package-and-publish:
     runs-on: 'ubuntu-22.04'
     outputs:
-      # digest: ${{ steps.build-push-action.outputs.digest }}
       digest: ${{ steps.trim-and-save-digest.outputs.digest }}
     needs:
       - get-tags
@@ -114,6 +113,7 @@ jobs:
 
     #
     # Use Storms test docker account
+    # changeme to replicated
     #
     - uses: docker/login-action@v3
       with:
@@ -124,15 +124,17 @@ jobs:
       id: build-push-action
       with:
         context: deploy
+        #changeme to replicated 
         image-name: index.docker.io/st0rmz1/replicated-sdk:v${{needs.get-tags.outputs.tag}}
         git-tag: v${{needs.get-tags.outputs.tag}}
         registry-username: ${{ secrets.DOCKERHUB_USER }}
         registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: 'Confirm we have a digest from build-push-action'
-      id: debug-confirm-digest-from-build-push-action
-      run: |
-        echo "image digest from build-push-action: ${{ steps.build-push-action.outputs.digest }}"
+    # removeme
+    #- name: 'Confirm we have a digest from build-push-action'
+    #  id: debug-confirm-digest-from-build-push-action
+    #  run: |
+    #    echo "image digest from build-push-action: ${{ steps.build-push-action.outputs.digest }}"
 
     - name: 'Trim and Save Digest'
       id: trim-and-save-digest
@@ -158,13 +160,7 @@ jobs:
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.10.0
     with: 
       image: index.docker.io/st0rmz1/replicated-sdk:v${{ needs.get-tags.outputs.tag }}
-      # digest: "foo"
       digest: ${{ needs.package-and-publish.outputs.digest }}
-
-
-
-
-
     secrets:
       registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
       registry-username: ${{ secrets.DOCKERHUB_USER }}
